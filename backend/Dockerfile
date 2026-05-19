@@ -1,19 +1,16 @@
-FROM php:8.2-fpm-alpine
+FROM php:8.2-apache
 
+RUN a2dismod mpm_event || true
+RUN a2enmod mpm_prefork rewrite mysqli
 RUN docker-php-ext-install mysqli
-
-RUN apk add --no-cache nginx
-
-RUN mkdir -p /run/nginx
 
 COPY . /var/www/html/
 
-COPY nginx.conf /etc/nginx/http.d/default.conf
+RUN chown -R www-data:www-data /var/www/html
 
-COPY start.sh /start.sh
+ENV APACHE_RUN_USER www-data
+ENV APACHE_RUN_GROUP www-data
 
-RUN chmod +x /start.sh
+EXPOSE 80
 
-EXPOSE 8080
-
-CMD ["/start.sh"]
+CMD ["apache2-foreground"]
