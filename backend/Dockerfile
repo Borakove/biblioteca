@@ -25,7 +25,8 @@ RUN printf 'server {\n\
 RUN printf '#!/bin/sh\n\
 php-fpm -D\n\
 sleep 2\n\
-nginx -g "daemon off;"\n' > /start.sh
+echo "Iniciando nginx..."\n\
+nginx -g "daemon off;" 2>&1\n' > /start.sh
 
 RUN chmod +x /start.sh
 
