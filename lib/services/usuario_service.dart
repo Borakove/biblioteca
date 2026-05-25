@@ -13,7 +13,7 @@ class UsuarioService {
     if (response.statusCode == 200) {
       return Usuario.fromJson(jsonDecode(response.body));
     }
-    return null; // login inválido
+    return null;
   }
 
   Future<String> cadastrar(String nome, String email, String senha) async {
@@ -30,5 +30,14 @@ class UsuarioService {
     final response = await http.get(url);
     final List<dynamic> json = jsonDecode(response.body);
     return json.map((e) => Usuario.fromJson(e)).toList();
+  }
+
+  Future<String> resetarSenha(String email, String novaSenha) async {
+    final url = Uri.parse(
+      '$baseUrl/usuarios.php?acao=resetarSenha&email=$email&nova_senha=$novaSenha',
+    );
+    final response = await http.get(url);
+    final json = jsonDecode(response.body);
+    return json['mensagem'] ?? json['erro'] ?? 'Erro desconhecido';
   }
 }

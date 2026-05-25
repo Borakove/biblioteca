@@ -47,4 +47,13 @@ class UsuarioDAO {
                      VALUES ('$nome', '$email', '$senhaCriptografada', 'aluno')");
         $con->close();
     }
+
+    public function atualizarSenha($email, $novaSenha) {
+        $con = $this->conectar();
+        $senhaCriptografada = md5($novaSenha);
+        $resultado = $con->query("UPDATE usuarios SET senha = '$senhaCriptografada' WHERE email = '$email'");
+        $afetados = $con->affected_rows;
+        $con->close();
+        return $afetados > 0;
+    }
 }
